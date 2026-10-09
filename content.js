@@ -2,7 +2,7 @@
   let settings = MouseRemap.normalize(null);
   const held = new Map();
   function emit(type, target, binding, repeat = false) {
-    target.dispatchEvent(new KeyboardEvent(type, { ...binding, repeat,
+    return target.dispatchEvent(new KeyboardEvent(type, { ...binding, repeat,
       bubbles: true, cancelable: true, composed: true }));
   }
   function releaseAll() {
@@ -31,7 +31,7 @@
     const target = document.activeElement && document.activeElement !== document.body
       ? document.activeElement : event.composedPath()[0];
     held.set(event.button, { target, binding });
-    emit('keydown', target, binding);
+    if (emit('keydown', target, binding)) MouseRemap.performDefault?.(target, binding);
   }, true);
   window.addEventListener('mouseup', event => {
     if (!event.isTrusted) return;

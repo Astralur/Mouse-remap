@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Mouse Remap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Asigna los botones del ratón a teclas en páginas web.",
   "permissions": ["storage"],
   "action": { "default_popup": "popup.html" },
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["mapping.js", "content.js"],
+    "js": ["mapping.js", "actions.js", "content.js"],
     "run_at": "document_start",
     "all_frames": true,
     "match_about_blank": true
