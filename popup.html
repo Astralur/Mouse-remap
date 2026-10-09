@@ -6,10 +6,16 @@
   <p>Elige un botón y pulsa la tecla o combinación que quieras asignar.</p>
   <label><input type="checkbox" id="enabled"> Activar remapeo</label>
   <label><input type="checkbox" id="block"> Bloquear el clic original</label>
+  <label>Comportamiento <select id="mode"><option value="auto">Automático (Cytos: juego)</option><option value="game">Juego: enviar teclas sin cambiar el foco</option><option value="page">Página: Tab cambia el foco</option></select></label>
   <div id="mappings"></div>
+  <button id="quick-tab">Asignar Atrás → Tab</button>
+  <button id="cytos-tab">Configurar Cytos: Atrás → Tab</button>
+  <button id="apply">Aplicar y comprobar este sitio</button>
+  <button id="test-page">Abrir prueba del ratón</button>
   <button id="reset">Restablecer asignaciones</button>
   <p id="status" role="status" aria-live="polite"></p>
-  <p class="note">Tab mueve el foco dentro de la página; Shift + Tab lo mueve hacia atrás. Las otras teclas envían eventos sintéticos: no escriben texto automáticamente ni activan atajos de Chrome o del sistema. No funciona en chrome://, Chrome Web Store ni fuera del navegador.</p>
+  <p id="diagnostic" class="note" aria-live="polite"></p>
+  <p class="note">En modo juego, Tab se envía al juego sin mover el foco. En modo página, Tab y Shift + Tab mueven el foco. Son eventos sintéticos: no escriben texto automáticamente ni activan atajos del sistema. No funciona en páginas protegidas ni fuera de Chrome.</p>
   <script src="mapping.js"></script><script src="popup.js"></script>
 </body>
 </html>

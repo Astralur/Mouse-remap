@@ -4,6 +4,21 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const mapping = require('../mapping.js');
+test('compatibilidad numérica para Tab, P, números, funciones y teclado numérico', () => {
+  for (const [code, expected] of [['Tab', 9], ['KeyP', 80], ['Digit1', 49], ['F12', 123], ['Numpad1', 97]]) {
+    const options = mapping.eventOptions({ key: code === 'Tab' ? 'Tab' : 'p', code });
+    assert.equal(options.keyCode, expected);
+    assert.equal(options.which, expected);
+  }
+  assert.equal(mapping.eventOptions({ key: '1', code: 'Numpad1' }).location, 3);
+});
+test('Cytos activa automáticamente el modo juego y permite anularlo', () => {
+  assert.equal(mapping.gameMode(mapping.normalize(null), 'cytos.io'), true);
+  assert.equal(mapping.gameMode(mapping.normalize(null), 'example.org'), false);
+  assert.equal(mapping.gameMode(mapping.normalize(null), 'fakecytos.io'), false);
+  assert.equal(mapping.gameMode(mapping.normalize({ mode: 'page' }), 'cytos.io'), false);
+  assert.equal(mapping.gameMode(mapping.normalize({ mode: 'game' }), 'example.org'), true);
+});
 test('normaliza ajustes y rechaza asignaciones inválidas', () => {
   const config = mapping.normalize({ mappings: { 0: { key: 'a', code: 'KeyA', ctrlKey: true },
     1: null, 9: { key: 'b', code: 'KeyB' } } });
@@ -14,10 +29,12 @@ test('normaliza ajustes y rechaza asignaciones inválidas', () => {
 async function harness(settings) {
   const handlers = {}; const output = []; let change;
   const target = { dispatchEvent: event => { output.push(event); return true; } };
-  const context = { MouseRemap: mapping, KeyboardEvent: class {
+  const context = { MouseRemap: mapping, CustomEvent: class {
+    constructor(type, options) { this.type = type; Object.assign(this, options); }
+  }, KeyboardEvent: class {
     constructor(type, options) { this.type = type; Object.assign(this, options); }
   }, document: { activeElement: target, body: {} },
-  window: { addEventListener: (name, fn) => (handlers[name] ||= []).push(fn) },
+  window: { addEventListener: (name, fn) => (handlers[name] ||= []).push(fn), dispatchEvent: () => true },
   chrome: { storage: { local: { get: async () => ({ settings }) },
     onChanged: { addListener: fn => { change = fn; } } } } };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../content.js'), 'utf8'), context);
@@ -61,10 +78,10 @@ test('permite conservar el clic original', async () => {
   h.fire('mouseup');
   assert.equal(h.output.length, 2);
 });
-test('manifest usa MV3 y solo permiso de almacenamiento', () => {
+test('manifest usa MV3 y permisos para aplicar y comprobar el remapeo', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '../manifest.json')));
   assert.equal(manifest.manifest_version, 3);
-  assert.deepEqual(manifest.permissions, ['storage']);
+  assert.deepEqual(manifest.permissions, ['storage', 'activeTab', 'scripting']);
   for (const script of manifest.content_scripts[0].js) {
     assert.equal(fs.existsSync(path.join(__dirname, '..', script)), true);
   }

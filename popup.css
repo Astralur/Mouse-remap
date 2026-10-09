@@ -4,6 +4,7 @@ h1 { margin: 0 0 8px; font-size: 24px; }
 p { line-height: 1.5; }
 label { display: block; margin: 12px 0; }
 input { accent-color: #60a5fa; }
+select { display: block; width: 100%; margin-top: 8px; padding: 8px; color: inherit; background: #263449; }
 .row { display: grid; grid-template-columns: 90px 1fr 32px; align-items: center; gap: 8px; margin: 10px 0; }
 button { background: #263449; color: #fff; border: 1px solid #52647c; border-radius: 7px; padding: 9px; cursor: pointer; }
 button:hover, button:focus-visible { background: #374b68; outline: 2px solid #60a5fa; }

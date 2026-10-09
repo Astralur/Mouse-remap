@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Prueba de Mouse Remap</title><link rel="stylesheet" href="test.css"></head>
+<body>
+  <h1>Prueba del ratón · Mouse Remap 1.0.2</h1>
+  <p>Esta página permite separar un fallo de instalación de una página que rechaza el remapeo.</p>
+  <button id="configure">Asignar Atrás → Tab y empezar</button>
+  <p>Después pulsa el botón lateral. El foco debería avanzar entre los tres campos.</p>
+  <section><label>Campo 1 <input id="first"></label><label>Campo 2 <input></label><label>Campo 3 <input></label></section>
+  <p id="setup" role="status"></p>
+  <p id="mouse" role="status">Aún no se ha recibido ningún clic.</p>
+  <p id="keyboard" role="status">Aún no se ha emitido ninguna tecla.</p>
+  <p>Si aparece «Adelante» al pulsar tu lateral, asigna ese botón en la extensión. Si no aparece ningún clic, tu sistema o controlador no lo entrega a la página.</p>
+  <p>Si funciona aquí y falla en tu juego o sitio, ese sitio puede exigir pulsaciones reales. Una extensión no puede producirlas. Tab aquí mueve el foco de la página; no cambia de pestaña de Chrome ni controla programas externos.</p>
+  <script src="mapping.js"></script><script src="actions.js"></script><script src="content.js"></script><script src="test.js"></script>
+</body>
+</html>

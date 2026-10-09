@@ -1,0 +1,7 @@
+:root { color-scheme: dark; font: 17px system-ui; background: #111827; color: #e5e7eb; }
+body { max-width: 800px; margin: 60px auto; padding: 24px; line-height: 1.6; }
+button, input { font: inherit; padding: 12px; border-radius: 8px; border: 1px solid #64748b; }
+button { cursor: pointer; background: #1d4ed8; color: white; }
+label { display: block; margin: 16px 0; }
+input:focus { outline: 4px solid #60a5fa; }
+[role="status"] { padding: 12px; background: #1e293b; border-radius: 8px; overflow-wrap: anywhere; }

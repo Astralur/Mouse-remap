@@ -4,7 +4,22 @@ Extensión Manifest V3 sin dependencias que asigna los botones izquierdo, centra
 derecho, atrás y adelante a una tecla o combinación de teclado en páginas web.
 La configuración se guarda localmente. No envía datos a servidores.
 
-Versión 1.0.1: añade movimiento de foco para Tab y Shift + Tab.
+Versión 1.0.2: incluye movimiento de foco para Tab y Shift + Tab, aplicación al sitio
+activo, códigos `keyCode`/`which` para juegos, asignación rápida Atrás → Tab y una
+página de diagnóstico del ratón. Captura pointerdown/mousedown sin duplicar teclas.
+
+## Cytos
+
+Abre `https://cytos.io/?grass`, abre la extensión y pulsa **Configurar Cytos:
+Atrás → Tab**. Guarda la asignación, activa el modo juego y aplica los scripts al
+documento principal. Cierra el popup y vuelve al juego. El modo automático también
+selecciona modo juego en `cytos.io`: envía `key = Tab`, `code = Tab`, `keyCode = 9`
+y `which = 9`, sin mover el foco entre formularios. No modifica el cliente del juego.
+
+La lógica de compatibilidad está probada en Chromium con lectores de códigos
+numéricos, pero el funcionamiento en Cytos en vivo no se ha podido validar: la red
+del entorno bloquea ese dominio. Una página que exija `isTrusted` seguirá rechazando
+estas teclas; no se falsea ese atributo.
 
 ## Instalar
 
@@ -19,6 +34,26 @@ Para actualizar: reemplaza los archivos en la misma carpeta, pulsa el botón de
 recarga de Mouse Remap en `chrome://extensions` y recarga la página donde lo uses.
 Para tu botón lateral, asigna **Atrás → Tab** (sin mantener Shift).
 
+## Si no funciona
+
+Abre el popup y pulsa **Asignar Atrás → Tab**. En una página web normal, pulsa
+**Aplicar y comprobar este sitio**: la extensión mostrará si está conectada y
+los ajustes que el sitio está usando. Chrome puede pedir que concedas acceso al
+sitio. Estos botones utilizan `activeTab` y `scripting`; no envían datos fuera
+del navegador. La aplicación manual actúa sobre el documento principal; los
+iframes reciben la extensión declarada al cargarse la página.
+
+Pulsa **Abrir prueba del ratón** y después **Asignar Atrás → Tab y empezar**.
+Pulsa el lateral: verás el número/nombre del botón recibido y la tecla emitida.
+El foco debe pasar del primer campo al segundo. Si el botón es «Adelante», asigna
+ese botón. Si no se recibe ningún clic, comprueba el controlador de tu ratón.
+Si esta prueba funciona y el sitio no, indica la dirección y la acción esperada:
+puede exigir eventos físicos o tratar Tab de forma diferente.
+
+Tras actualizar desde una versión antigua, recarga también la página web para
+retirar los manejadores de la versión anterior. Una aplicación repetida de la
+versión nueva mantiene un único conjunto de manejadores.
+
 Puedes asignar combinaciones como Ctrl + K, eliminar cada asignación con ×,
 desactivar el remapeo y conservar o bloquear la acción original del clic.
 La tecla se pulsa al presionar el botón y se libera al soltarlo. Perder el foco
@@ -29,14 +64,15 @@ Los cambios de configuración se aplican a los documentos donde ya está cargada
 
 Chrome permite emitir eventos `keydown` y `keyup` sintéticos hacia el elemento
 enfocado o, si no hay uno, hacia el elemento pulsado. Las páginas que escuchan esos
-eventos pueden responder; las que exigen `isTrusted` los rechazan. Tab y Shift + Tab
+eventos pueden responder; las que exigen `isTrusted` los rechazan. En modo página,
+Tab y Shift + Tab
 mueven el foco entre controles visibles y habilitados dentro del documento (al llegar
 al extremo vuelven al otro extremo). Respetan la cancelación del evento por la página.
 No trasladan el foco a la barra de direcciones ni entre documentos de iframes.
 Los demás eventos no
 escriben texto automáticamente en campos ni ejecutan acciones predeterminadas como
 desplazamiento o atajos del navegador. Los códigos heredados `keyCode` y
-`which` no se emulan. Algunos botones reservados por el navegador o el sistema
+`which` se incluyen para las teclas estándar reconocidas. Algunos botones reservados por el navegador o el sistema
 pueden no llegar al documento.
 
 No funciona fuera de Chrome, en su interfaz, páginas `chrome://`, Chrome Web Store
